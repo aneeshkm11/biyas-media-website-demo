@@ -655,3 +655,106 @@ h3,
     color: #fff;
     font-family: 'Outfit';
 }
+
+/* --- Mobile Responsive Rules --- */
+@media (max-width: 768px) {
+    /* Header Fixes */
+    .main-header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .logo-text {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+    .nav-links {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+    .nav-links a {
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+    .sound-toggle-btn {
+        margin-left: 0;
+        width: 35px;
+        height: 35px;
+    }
+
+    /* Hero Fixes */
+    .hero-feature-overlay h2 {
+        font-size: 3rem;
+        letter-spacing: 2px;
+        line-height: 1.1;
+    }
+    .hero-feature-overlay p {
+        font-size: 1rem;
+    }
+    #feature-1, #feature-3 { left: 5vw; width: 90vw; }
+    #feature-2 { right: 5vw; width: 90vw; }
+
+    /* Carousel Fixes */
+    .center-sun-img {
+        width: 80vw;
+        max-width: 300px;
+    }
+    .center-text-content {
+        width: 90vw;
+    }
+    .center-text-content h3 {
+        font-size: 1.8rem;
+    }
+    .center-text-content p {
+        font-size: 0.95rem;
+    }
+
+    /* Content Sections Layout Overrides */
+    .content-row {
+        flex-direction: column !important; /* Overrides .layout-a and .layout-b */
+        gap: 2rem;
+        padding: 0 5vw;
+        text-align: center;
+        min-height: auto;
+    }
+    .content-logo {
+        width: 100%;
+    }
+    .content-logo-inner {
+        width: 300px;
+        height: 300px;
+        font-size: 1.5rem;
+    }
+
+    /* Typography Overrides */
+    .content-text .content-heading {
+        margin: 0 auto 1.5rem auto;
+    }
+    .heading-line-1 {
+        font-size: 2.8rem;
+        letter-spacing: -1.5px;
+    }
+    .heading-line-2 {
+        font-size: 0.8rem;
+    }
+    .content-text p {
+        font-size: 1rem;
+    }
+
+    /* Footer Fixes */
+    .footer {
+        padding: 5vh 5vw;
+        gap: 2rem;
+    }
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    .footer-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
