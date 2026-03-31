@@ -352,7 +352,8 @@ brandsData.forEach((brand, i) => {
 track.innerHTML = trackHTML;
 
 const items = gsap.utils.toArray('.carousel-item');
-const radius = 650; // Expansive Layout Depth
+const isMobile = window.innerWidth < 768;
+const radius = isMobile ? 180 : 650; // Expansive Layout Depth
 const angleStep = 360 / items.length;
 
 // Position items initially so they aren't stacked at 0,0 before scroll
@@ -453,8 +454,8 @@ function renderCarousel() {
 
         // Target for focused item (snap to center, bring forward on Z)
         const targetX = 0;
-        const targetY = -200; // Move UP to replace the title position
-        const targetZ = radius + 150; 
+        const targetY = isMobile ? -100 : -200; // Move UP to replace the title position
+        const targetZ = radius + (isMobile ? 50 : 150); 
 
         // Current focus animation linearly from 0 to 1 (with elastic overshoot out bound)
         let fp = itemsFocus[i].progress;
