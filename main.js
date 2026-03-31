@@ -131,35 +131,15 @@ for (let i = 0; i < 300; i++) {
     });
 }
 
-// Comet properties
-const comets = [];
-for (let i = 0; i < 3; i++) {
-    comets.push(createComet());
-}
-
-function createComet() {
-    return {
-        x: Math.random() * canvas.width + canvas.width / 2, // Start right-ish
-        y: -(Math.random() * canvas.height), // Start above screen
-        length: Math.random() * 150 + 50,
-        speedX: -(Math.random() * 5 + 3), // Move left fast
-        speedY: (Math.random() * 5 + 3), // Move down fast
-        thickness: Math.random() * 1.5 + 0.5,
-        opacity: Math.random() * 0.8 + 0.2
-    };
-}
-
 function drawStars() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw Stars
     stars.forEach(star => {
         ctx.fillStyle = `rgba(255, 255, 255, ${star.brightness})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
         ctx.fill();
 
-        star.y -= star.speed; // Move slowly up
+        star.y -= star.speed;
         // Subtle twinkle effect
         star.brightness += (Math.random() - 0.5) * 0.05;
         star.brightness = Math.max(0.1, Math.min(1, star.brightness));
@@ -169,35 +149,6 @@ function drawStars() {
             star.x = Math.random() * canvas.width;
         }
     });
-
-    // Draw Comets
-    comets.forEach(comet => {
-        // Draw trailing gradient
-        const tailX = comet.x - (comet.speedX * comet.length * 0.1);
-        const tailY = comet.y - (comet.speedY * comet.length * 0.1);
-
-        const gradient = ctx.createLinearGradient(comet.x, comet.y, tailX, tailY);
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${comet.opacity})`);
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = comet.thickness;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(comet.x, comet.y);
-        ctx.lineTo(tailX, tailY);
-        ctx.stroke();
-
-        // Update Position
-        comet.x += comet.speedX;
-        comet.y += comet.speedY;
-
-        // Reset if off screen (bottom-left)
-        if (comet.x < -200 || comet.y > canvas.height + 200) {
-            Object.assign(comet, createComet());
-        }
-    });
-
     requestAnimationFrame(drawStars);
 }
 drawStars();
