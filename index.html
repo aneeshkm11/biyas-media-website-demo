@@ -25,9 +25,9 @@
     </audio>
     <canvas id="space-canvas"></canvas>
 
-    <header class="main-header glassmorphism">
-        <div class="header-logo">
-            <span class="logo-text">Biyas Media Services</span>
+    <header class="main-header">
+        <div class="header-logo" style="width: 300px; height: 100px; display: flex; align-items: center; justify-content: flex-start;">
+            <img id="header-logo-img" src="PUBLIC/images/bm logo/BIYAS MEDIA WHITE-1.png" alt="Biyas Media Services" style="max-height: 100%; max-width: 100%; object-fit: contain;">
         </div>
         <nav class="nav-links">
             <a href="#hero">Home</a>
@@ -92,7 +92,7 @@
             </section>
 
             <!-- Phase 3: Content Sections (Generated via JS) -->
-            <section class="content-sections-wrapper" id="content-sections">
+            <div class="content-sections-wrapper" id="content-sections">
                 <!-- 10 recurring blocks will be injected here -->
             </section>
 
@@ -124,38 +124,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/split-type"></script>
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
-
-    <!-- Context for Side by Side Preview -->
-    <div id="preview-workspace" style="display: none;">
-        <div class="preview-header glassmorphism">
-            <h2><span class="brand-text-gradient">Responsive</span> Preview Engine</h2>
-            <button id="exit-preview-btn" class="preview-btn">&larr; Return to Live Site</button>
-        </div>
-        <div class="preview-body">
-            <div class="desktop-pane">
-                <div class="pane-label">Desktop View <span class="res-tag">(Fluid Width)</span></div>
-                <div class="iframe-container">
-                    <iframe id="iframe-desktop" src=""></iframe>
-                </div>
-            </div>
-            <div class="mobile-pane">
-                <div class="pane-label">Mobile Simulation <span class="res-tag">(iPhone 14 / 390px)</span></div>
-                <div class="phone-mockup">
-                    <div class="phone-notch"></div>
-                    <iframe id="iframe-mobile" src=""></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Floating Toggle Button -->
-    <button id="launch-preview-btn" class="glassmorphism preview-float-btn" title="Launch Side-by-Side Preview">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <!-- Monitor Icon -->
-            <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
-        </svg>
-        <span>Preview Mode</span>
-    </button>
 
     <script src="main.js"></script>
 </body>

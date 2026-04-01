@@ -275,8 +275,15 @@ for (let i = 0; i < frameCount; i++) {
 }
 
 function resizeHeroCanvas() {
-    heroCanvas.width = window.innerWidth;
-    heroCanvas.height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    // Set actual internal canvas resolution higher for Retina displays
+    heroCanvas.width = window.innerWidth * dpr;
+    heroCanvas.height = window.innerHeight * dpr;
+    
+    // Keep CSS size identical to viewport
+    heroCanvas.style.width = window.innerWidth + 'px';
+    heroCanvas.style.height = window.innerHeight + 'px';
+    
     renderHeroFrame();
 }
 
@@ -296,6 +303,11 @@ function renderHeroFrame() {
     const centerShift_y = (heroCanvas.height - img.height * ratio) / 2;
 
     heroCtx.clearRect(0, 0, heroCanvas.width, heroCanvas.height);
+    
+    // Force maximum image smoothing quality to ensure vector-like sharpness on scale
+    heroCtx.imageSmoothingEnabled = true;
+    heroCtx.imageSmoothingQuality = 'high';
+
     heroCtx.drawImage(img, 0, 0, img.width, img.height,
         centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
 }
@@ -649,59 +661,39 @@ if (bgMusic) {
     }
 }
 
-// 7. Responsive Side-by-Side Preview Engine
-const isIframe = window.self !== window.top || window.location.search.includes('preview=true');
-const launchPreviewBtn = document.getElementById('launch-preview-btn');
-const exitPreviewBtn = document.getElementById('exit-preview-btn');
-const previewWorkspace = document.getElementById('preview-workspace');
-
-if (isIframe) {
-    // We are inside an iframe snippet
-    // 1. Hide the launch preview button to prevent infinite recursion
-    if (launchPreviewBtn) launchPreviewBtn.style.display = 'none';
+// 7. Header Logo Sequence Animation
+const headerLogoImg = document.getElementById('header-logo-img');
+if (headerLogoImg) {
+    const totalLogoFrames = 37;
+    const logoFrames = [];
     
-    // 2. Force Mute background music if it exists so audio doesn't overlap
-    if (bgMusic) {
-        bgMusic.muted = true;
-        bgMusic.volume = 0;
-        // Don't auto-play inside iframes
-        bgMusic.pause();
+    // Preload source strings
+    for (let i = 1; i <= totalLogoFrames; i++) {
+        const srcString = `PUBLIC/images/bm logo/BIYAS MEDIA WHITE-${i}.png`;
+        logoFrames.push(srcString);
+        
+        // Optimistically preload the Image object in memory
+        const preloader = new Image();
+        preloader.src = srcString;
     }
-} else {
-    // We are in the main host window
-    if (launchPreviewBtn && previewWorkspace && exitPreviewBtn) {
-        launchPreviewBtn.addEventListener('click', () => {
-            // Show workspace securely over everything
-            previewWorkspace.style.display = 'flex';
-            
-            // Build absolute URL for the iframe to ensure it behaves consistently
-            const iframeUrl = window.location.pathname + window.location.hash + "?preview=true";
 
-            // Set sources to initiate parsing of the desktop and mobile versions
-            document.getElementById('iframe-desktop').src = iframeUrl;
-            document.getElementById('iframe-mobile').src = iframeUrl;
+    let logoFrameIndex = 0;
+    let logoLastTime = 0;
+    const logoFps = 12; // Slow elegant framerate (12 FPS)
+    const logoInterval = 1000 / logoFps;
 
-            // Pause host audio while previewing if currently playing
-            if (bgMusic && !bgMusic.paused) {
-                bgMusic.pause();
-                // We'll set a custom flag so we know we paused it
-                window._wasAudioPlayingBeforePreview = true;
-            }
-        });
-
-        exitPreviewBtn.addEventListener('click', () => {
-            // Hide the workspace
-            previewWorkspace.style.display = 'none';
-            
-            // Re-mount iframe sources to 'about:blank' memory release
-            document.getElementById('iframe-desktop').src = '';
-            document.getElementById('iframe-mobile').src = '';
-
-            // Resume audio safely if it was playing
-            if (bgMusic && window._wasAudioPlayingBeforePreview) {
-                bgMusic.play().catch(() => {});
-                window._wasAudioPlayingBeforePreview = false;
-            }
-        });
+    function animateHeaderLogo(time) {
+        requestAnimationFrame(animateHeaderLogo);
+        if (!time) return;
+        
+        const deltaTime = time - logoLastTime;
+        if (deltaTime > logoInterval) {
+            logoLastTime = time - (deltaTime % logoInterval);
+            logoFrameIndex = (logoFrameIndex + 1) % totalLogoFrames;
+            headerLogoImg.src = logoFrames[logoFrameIndex];
+        }
     }
+    requestAnimationFrame(animateHeaderLogo);
 }
+
+
