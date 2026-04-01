@@ -262,11 +262,11 @@ contentWrapper.innerHTML += sectionsHTML;
 const heroCanvas = document.getElementById('hero-image-sequence');
 const heroCtx = heroCanvas.getContext('2d');
 
-const frameCount = 240;
+const frameCount = 237;
 const imagesSeq = [];
 const imageObj = { frame: 0 };
 
-const currentFrame = index => `PUBLIC/images/new_hero_sequence/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.png`;
+const currentFrame = index => `PUBLIC/images/biyas media hero section/freepik_${(index + 1).toString().padStart(4, '0')}.png`;
 
 for (let i = 0; i < frameCount; i++) {
     const img = new Image();
@@ -644,6 +644,63 @@ if (bgMusic) {
                 bgMusic.muted = true;
                 iconUnmuted.style.display = 'none';
                 iconMuted.style.display = 'block';
+            }
+        });
+    }
+}
+
+// 7. Responsive Side-by-Side Preview Engine
+const isIframe = window.self !== window.top || window.location.search.includes('preview=true');
+const launchPreviewBtn = document.getElementById('launch-preview-btn');
+const exitPreviewBtn = document.getElementById('exit-preview-btn');
+const previewWorkspace = document.getElementById('preview-workspace');
+
+if (isIframe) {
+    // We are inside an iframe snippet
+    // 1. Hide the launch preview button to prevent infinite recursion
+    if (launchPreviewBtn) launchPreviewBtn.style.display = 'none';
+    
+    // 2. Force Mute background music if it exists so audio doesn't overlap
+    if (bgMusic) {
+        bgMusic.muted = true;
+        bgMusic.volume = 0;
+        // Don't auto-play inside iframes
+        bgMusic.pause();
+    }
+} else {
+    // We are in the main host window
+    if (launchPreviewBtn && previewWorkspace && exitPreviewBtn) {
+        launchPreviewBtn.addEventListener('click', () => {
+            // Show workspace securely over everything
+            previewWorkspace.style.display = 'flex';
+            
+            // Build absolute URL for the iframe to ensure it behaves consistently
+            const iframeUrl = window.location.pathname + window.location.hash + "?preview=true";
+
+            // Set sources to initiate parsing of the desktop and mobile versions
+            document.getElementById('iframe-desktop').src = iframeUrl;
+            document.getElementById('iframe-mobile').src = iframeUrl;
+
+            // Pause host audio while previewing if currently playing
+            if (bgMusic && !bgMusic.paused) {
+                bgMusic.pause();
+                // We'll set a custom flag so we know we paused it
+                window._wasAudioPlayingBeforePreview = true;
+            }
+        });
+
+        exitPreviewBtn.addEventListener('click', () => {
+            // Hide the workspace
+            previewWorkspace.style.display = 'none';
+            
+            // Re-mount iframe sources to 'about:blank' memory release
+            document.getElementById('iframe-desktop').src = '';
+            document.getElementById('iframe-mobile').src = '';
+
+            // Resume audio safely if it was playing
+            if (bgMusic && window._wasAudioPlayingBeforePreview) {
+                bgMusic.play().catch(() => {});
+                window._wasAudioPlayingBeforePreview = false;
             }
         });
     }
